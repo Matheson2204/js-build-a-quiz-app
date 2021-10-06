@@ -16,6 +16,8 @@ window.addEventListener("DOMContentLoaded", () => {
   start.addEventListener("click", function (e) {
     document.querySelector("#quizBlock").style.display = "block";
     start.style.display = "none";
+    startTimer();
+    
   });
   // quizArray QUESTIONS & ANSWERS
   // q = QUESTION, o = OPTIONS, a = CORRECT ANSWER
@@ -32,9 +34,19 @@ window.addEventListener("DOMContentLoaded", () => {
       a: 3,
     },
     {
-      q: "What is the capital of Australia",
+      q: "What is the capital of Australia?",
       o: ["Sydney", "Canberra", "Melbourne", "Perth"],
       a: 1,
+    },
+    {
+      q: "Which US State is Las Vegas located?",
+      o: ["Michigan", "Georgia", "Nevada", "Arizona"],
+      a: 2,
+    },
+    {
+      q: "Which is not a European Country?",
+      o: ["Russia", "France", "Norway", "Algeria"],
+      a: 3,
     },
   ];
 
@@ -48,12 +60,28 @@ window.addEventListener("DOMContentLoaded", () => {
                     <li class="list-group-item mt-2" id="li_${index}_0"><input type="radio" name="radio${index}" id="radio_${index}_0"> ${quizItem.o[0]}</li>
                     <li class="list-group-item" id="li_${index}_1"><input type="radio" name="radio${index}" id="radio_${index}_1"> ${quizItem.o[1]}</li>
                     <li class="list-group-item"  id="li_${index}_2"><input type="radio" name="radio${index}" id="radio_${index}_2"> ${quizItem.o[2]}</li>
-                    <li class="list-group-item"  id="li_${index}_3"><input type="radio" name="radio${index}" id="radio_${index}_3"> ${quizItem.o[3]}</li>
+                    <li class="list-group-item"  id="li_${index}_3"><input type="radio" name="radio${index}" id="radio_${index}_3">${quizItem.o[3]}</li>
                     </ul>
                     <div>&nbsp;</div>`;
       quizWrap.innerHTML = quizDisplay;
     });
   };
+
+
+//function to submit form
+const subBtn = document.querySelector('#btnSubmit');
+subBtn.addEventListener("click", () => calculateScore());
+  
+  
+   
+   
+  // reset function
+  const resetBtn = document.querySelector('#btnReset');
+  resetBtn.addEventListener("click", () => {
+    location.reload()
+  })
+  
+  
 
   // Calculate the score
   const calculateScore = () => {
@@ -65,18 +93,55 @@ window.addEventListener("DOMContentLoaded", () => {
         let r = `radio_${index}_${i}`;
         liElement = document.querySelector("#" + li);
         radioElement = document.querySelector("#" + r);
-
+      
         if (quizItem.a == i) {
           //change background color of li element here
-        }
+          liElement.style.backgroundColor = 'green'
+        };
 
-        if (radioElement.checked) {
-          // code for task 1 goes here
+        if (radioElement.checked)  {
+         console.log(quizItem.o[i])
+          if(radioElement.checked && quizItem.a == i) {
+             score+=10
+          }
         }
       }
+  document.getElementById("score").innerHTML = `Your score is ${score}`;
     });
-  };
+    
+  }
+  document.getElementById('time').innerHTML =
+  01 + ":" + 01;
+  
 
+  function startTimer() {
+    var presentTime = document.getElementById('time').innerHTML;
+    var timeArray = presentTime.split(/[:]+/);
+    var m = timeArray[0];
+    var s = checkSecond((timeArray[1] - 1));
+    if(s==59){m=m-1}
+    if(m<0){
+      return 
+    } if (s === 0) {
+      calculateScore()
+    }
+    
+    document.getElementById('time').innerHTML =
+      m + ":" + s;
+    setTimeout(startTimer, 1000);
+    
+  }
+  
+  function checkSecond(sec) {
+    if (sec < 10 && sec >= 0) {sec = "0" + sec};
+    if (sec < 0) {sec = "59"};
+    return sec;
+  }
+  
+   
   // call the displayQuiz function
-  displayQuiz();
+ displayQuiz();
+  // call submitBtn function
+ 
 });
+ 
