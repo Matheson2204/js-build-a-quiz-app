@@ -113,19 +113,21 @@ subBtn.addEventListener("click", () => calculateScore());
   document.getElementById('time').innerHTML =
   01 + ":" + 01;
   
-
-  function startTimer() {
+  let timerStop = false;
+  function startTimer() { 
     var presentTime = document.getElementById('time').innerHTML;
     var timeArray = presentTime.split(/[:]+/);
     var m = timeArray[0];
-    var s = checkSecond((timeArray[1] - 1));
+    var s = (checkSecond((timeArray[1] - 1)));
+    if (s == '00' && timerStop) {
+      calculateScore()
+      console.log("Done") 
+    }
     if(s==59){m=m-1}
     if(m<0){
       return 
-    } if (s === 0) {
-      calculateScore()
-    }
-    
+    } 
+    timerStop = true;  
     document.getElementById('time').innerHTML =
       m + ":" + s;
     setTimeout(startTimer, 1000);
@@ -141,7 +143,5 @@ subBtn.addEventListener("click", () => calculateScore());
    
   // call the displayQuiz function
  displayQuiz();
-  // call submitBtn function
- 
 });
  
